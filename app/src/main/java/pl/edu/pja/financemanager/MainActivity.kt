@@ -56,20 +56,25 @@ class MainActivity : AppCompatActivity() {
                 10.00
         )
         thread {
-            db.positions().insert(position)
+            val x = db.positions().getAllForChosenMonth("2021","03")
+            println(x.joinToString ("|"))
+            //val z = db.positions().getSumForChosenMonth("2021", "05")
+            //println(z)
+            //db.positions().insert(position)
+            //db.positions().insert(position)
+            //val y = db.positions().getAll()
+            //println(y.joinToString ("|"))
+
+            /*db.positions().insert(position)
             db.positions().insert(position)
             db.positions().insert(position)
             val y = db.positions().getAll()
             println(y.joinToString ("|"))
-            val x = db.positions().getAllForChosenMonth("2021","04")
-            println(x.joinToString ("|"))
-            val z = db.positions().getSumForChosenMonth("2021", "05")
-            println(z)
             var a = db.positions().getPosition(2)
             a.place = "Tesco"
             db.positions().update(a)
             a = db.positions().getPosition(2)
-            println(a)
+            println(a)*/
 
 
         }
