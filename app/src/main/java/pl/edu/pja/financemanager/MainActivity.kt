@@ -5,6 +5,7 @@ import android.os.Bundle
 import pl.edu.pja.financemanager.databinding.ActivityMainBinding
 import pl.edu.pja.financemanager.db.Position
 import pl.edu.pja.financemanager.db.PositionDb
+import pl.edu.pja.financemanager.helper.DateHelper
 import java.time.LocalDate
 import kotlin.concurrent.thread
 
@@ -15,7 +16,18 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(mainBinding.root)
+        currentMonthBalance()
         //addPosition()
+    }
+
+    private fun currentMonthBalance() {
+        thread{
+            var today = LocalDate.now()
+            var currentMonthSum = db.positions().getSumForChosenMonth(today.year.toString(), DateHelper.getStringNumberMonth(today))
+            runOnUiThread {
+                mainBinding.summaryValue.text = String.format("%.2f", currentMonthSum)
+            }
+        }
     }
 
     fun addPosition() {
