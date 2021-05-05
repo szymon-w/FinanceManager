@@ -1,11 +1,14 @@
 package pl.edu.pja.financemanager
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import pl.edu.pja.financemanager.addEditActivity.AddPositionActivity
 import pl.edu.pja.financemanager.databinding.ActivityMainBinding
 import pl.edu.pja.financemanager.db.Position
 import pl.edu.pja.financemanager.db.PositionDb
 import pl.edu.pja.financemanager.helper.DateHelper
+import pl.edu.pja.financemanager.monthlyBalanceActivity.MonthlyBalanceActivity
 import java.time.LocalDate
 import kotlin.concurrent.thread
 
@@ -17,8 +20,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(mainBinding.root)
         currentMonthBalance()
+        addEditButton()
+        monthlyBalanceButton()
         //addPosition()
     }
+
+    private fun monthlyBalanceButton() {
+        mainBinding.monthButton.setOnClickListener {
+            Intent(this, MonthlyBalanceActivity::class.java).let(this::startActivity)
+        }
+    }
+
+    private fun addEditButton() {
+        mainBinding.addButton.setOnClickListener {
+                Intent(this, AddPositionActivity::class.java).let(this::startActivity)
+            }
+        }
 
     private fun currentMonthBalance() {
         thread{

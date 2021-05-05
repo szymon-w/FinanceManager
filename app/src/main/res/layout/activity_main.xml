@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/main_header"
+            android:id="@+id/monthly_balance_header"
             style="@style/Widget.AppCompat.TextView"
             android:layout_width="0dp"
             android:layout_height="match_parent"

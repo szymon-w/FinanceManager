@@ -1,7 +1,18 @@
 <resources>
     <string name="app_name">FinanceManager</string>
-    <string name="main_header"> Incomes &amp; Expenditures: </string>
+    <string name="main_header"> Incomes &amp; Expenditures </string>
     <string name="month_summary"> Current month: </string>
     <string name="add_button"> Add position</string>
     <string name="month_button"> Monthly balance </string>
+
+    <string name="add_edit_header"> Add or Edit Position </string>
+    <string name="place"> Place </string>
+    <string name="category"> Category </string>
+    <string name="date"> Date </string>
+    <string name="amount"> Amount </string>
+    <string name="submit_button"> Submit </string>
+
+    <string name="monthly_balance_header"> Monthly Balance </string>
+
+
 </resources>
