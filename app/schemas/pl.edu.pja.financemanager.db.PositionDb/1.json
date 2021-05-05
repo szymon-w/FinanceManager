@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "7ed8b5ad693f5f8d727ff69d66718b53",
+    "identityHash": "1f5335d7602eecf8aa59170c1cb80999",
     "entities": [
       {
         "tableName": "Position",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `place` TEXT NOT NULL, `category` TEXT NOT NULL, `date` INTEGER NOT NULL, `amount` REAL NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `place` TEXT NOT NULL, `category` TEXT NOT NULL, `eventDate` TEXT NOT NULL, `amount` REAL NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -27,9 +27,9 @@
             "notNull": true
           },
           {
-            "fieldPath": "date",
-            "columnName": "date",
-            "affinity": "INTEGER",
+            "fieldPath": "eventDate",
+            "columnName": "eventDate",
+            "affinity": "TEXT",
             "notNull": true
           },
           {
@@ -52,7 +52,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7ed8b5ad693f5f8d727ff69d66718b53')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1f5335d7602eecf8aa59170c1cb80999')"
     ]
   }
 }

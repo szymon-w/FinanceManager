@@ -5,12 +5,12 @@ import java.time.LocalDate
 
 class Converters {
     @TypeConverter
-    fun dateToNumber (value:Long): LocalDate {
-        return LocalDate.ofEpochDay(value)
+    fun dateToString (value:String): LocalDate {
+        return LocalDate.parse(value)
     }
 
     @TypeConverter
-    fun numberToDate(value:LocalDate): Long{
-        return value.toEpochDay()
+    fun stringToDate(value:LocalDate): String{
+        return value.toString()
     }
 }

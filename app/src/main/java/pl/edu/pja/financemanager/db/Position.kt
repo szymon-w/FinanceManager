@@ -9,6 +9,6 @@ data class Position(
     @PrimaryKey(autoGenerate = true) var id:Int,
     var place: String,
     var category: String,
-    var date: LocalDate,
+    var eventDate: LocalDate,
     var amount: Double
 )
