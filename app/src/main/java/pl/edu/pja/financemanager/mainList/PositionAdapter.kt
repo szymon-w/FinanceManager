@@ -2,11 +2,14 @@ package pl.edu.pja.financemanager.mainList
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.icu.text.Transliterator
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import pl.edu.pja.financemanager.MainActivity
+import pl.edu.pja.financemanager.addEditActivity.AddPositionActivity
 import pl.edu.pja.financemanager.databinding.ItemPositionBinding
 import pl.edu.pja.financemanager.db.Position
 import pl.edu.pja.financemanager.db.PositionDb
@@ -41,6 +44,22 @@ class PositionAdapter(
                     })
                     .show()
             true
+        }
+
+        holder.itemView.setOnClickListener(){
+
+            val intent = Intent(parentContext, AddPositionActivity::class.java)
+            val b = Bundle()
+
+            thread {
+                val item = items[position]
+                b.putInt("positionId",item.id)
+                b.putInt("requestCode",parentContext.editRequest)
+                intent.putExtras(b)
+                parentContext.runOnUiThread{
+                    parentContext.startActivityForResult(intent,parentContext.editRequest)
+                }
+            }
         }
     }
 

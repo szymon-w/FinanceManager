@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
     private val positionAdapter by lazy {PositionAdapter(db,this)}
     private var reloadNeeded = true
     private val addingRequest = 222
+    val editRequest = 333
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode:Int , resultCode: Int, data:Intent?) {
         super.onActivityResult(requestCode,resultCode,data)
-        if (requestCode == addingRequest) {
+        if (requestCode == addingRequest || requestCode==editRequest) {
             if (resultCode == Activity.RESULT_OK) {
                 this.reloadNeeded = true;
             }
@@ -67,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupAddEditButton() {
         mainBinding.addButton.setOnClickListener {
-                startActivityForResult(Intent(this, AddPositionActivity::class.java),222)
+                startActivityForResult(Intent(this, AddPositionActivity::class.java),addingRequest)
             }
         }
 
