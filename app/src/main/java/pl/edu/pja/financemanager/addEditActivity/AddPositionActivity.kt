@@ -21,6 +21,7 @@ class AddPositionActivity : AppCompatActivity() {
         setContentView(addEditBinding.root)
         submitButton()
         setupData()
+        shareButton()
     }
 
     private fun setupData(){
@@ -44,6 +45,19 @@ class AddPositionActivity : AppCompatActivity() {
             addEditPosition()
         }
     }
+
+    private fun shareButton(){
+        addEditBinding.shareButton.setOnClickListener{
+            val textValue = "Place: ${addEditBinding.editPlace.text} \nCategory: ${addEditBinding.editCategory.text} \nDate: ${addEditBinding.editDate.text} \nAmount: ${addEditBinding.editAmount.text}"
+            val shareIntent: Intent= Intent().apply{
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT,textValue)
+                type = "text/plain"
+           }
+            startActivity(Intent.createChooser(shareIntent,null))
+        }
+    }
+
 
     private fun addEditPosition() {
         val place = addEditBinding.editPlace.text.toString()
