@@ -6,7 +6,7 @@ import java.time.LocalDate
 
 @Entity
 data class Position(
-    @PrimaryKey(autoGenerate = true) var id:Int,
+    @PrimaryKey(autoGenerate = true) var id:Int = 0,
     var place: String,
     var category: String,
     var eventDate: LocalDate,

@@ -1,15 +1,16 @@
 package pl.edu.pja.financemanager.addEditActivity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import pl.edu.pja.financemanager.R
+import androidx.appcompat.app.AppCompatActivity
+import pl.edu.pja.financemanager.MainActivity
 import pl.edu.pja.financemanager.databinding.ActivityAddPositionBinding
-import pl.edu.pja.financemanager.databinding.ActivityMainBinding
 import pl.edu.pja.financemanager.db.Position
 import pl.edu.pja.financemanager.db.PositionDb
+import java.lang.Exception
 import java.time.LocalDate
 import kotlin.concurrent.thread
+
 
 class AddPositionActivity : AppCompatActivity() {
     private val addEditBinding by lazy { ActivityAddPositionBinding.inflate(layoutInflater)}
@@ -28,17 +29,27 @@ class AddPositionActivity : AppCompatActivity() {
     }
 
     private fun addPosition() {
-        val position = Position(
-            0,
-            addEditBinding.editPlace.text.toString(),
-            addEditBinding.editCategory.text.toString(),
-            LocalDate.parse(addEditBinding.editDate.text),
-            addEditBinding.editAmount.text.toString().toDoubleOrNull() ?: 0.0
-        )
-        thread {
-            db.positions().insert(position)
-            println("done")
-            finish()
+        val place = addEditBinding.editPlace.text.toString()
+        val category = addEditBinding.editCategory.text.toString()
+        val date =  try{LocalDate.parse(addEditBinding.editDate.text)}catch (e:Exception){null}
+        val amount = addEditBinding.editAmount.text.toString().toDoubleOrNull() ?: 0.0
+
+        if(place!="" && category !="" && date!= null && amount != 0.0)
+        {
+            val position = Position(
+                0,
+                place,
+                category,
+                 date,
+                amount
+            )
+            thread {
+                db.positions().insert(position)
+                println("done")
+                val returnIntent = Intent()
+                setResult(RESULT_OK, returnIntent)
+                finish()
+            }
         }
     }
 

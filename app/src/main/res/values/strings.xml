@@ -8,9 +8,11 @@
     <string name="add_edit_header"> Add or Edit Position </string>
     <string name="place"> Place </string>
     <string name="category"> Category </string>
-    <string name="date"> Date </string>
+    <string name="date"> Date (YYYY-MM-DD) </string>
     <string name="amount"> Amount </string>
     <string name="submit_button"> Submit </string>
+    <string name="info"> Expedintures should be written with prefix - </string>
+    <string name="info2"> Example: -250.00 </string>
 
     <string name="monthly_balance_header"> Monthly Balance </string>
 
