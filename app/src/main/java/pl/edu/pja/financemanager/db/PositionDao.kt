@@ -5,13 +5,13 @@ import androidx.room.*
 @Dao
 interface PositionDao {
 
-    @Query("Select * from Position")
+    @Query("Select * from Position order by eventDate")
     fun getAll():List<Position>
 
-    @Query("Select * from Position where strftime('%Y',eventDate)=:eventYear and strftime('%m',eventDate)=:eventMonth ")
+    @Query("Select * from Position where strftime('%Y',eventDate)=:eventYear and strftime('%m',eventDate)=:eventMonth  order by eventDate ")
     fun getAllForChosenMonth(eventYear:String, eventMonth:String): List<Position>
 
-    @Query("Select sum(amount) from Position where strftime('%Y',eventDate)=:eventYear and strftime('%m',eventDate)=:eventMonth ")
+    @Query("Select sum(amount) from Position where strftime('%Y',eventDate)=:eventYear and strftime('%m',eventDate)=:eventMonth  order by eventDate ")
     fun getSumForChosenMonth(eventYear:String, eventMonth:String): Double
 
     @Query("Select * from Position where id=:id")
@@ -23,7 +23,7 @@ interface PositionDao {
     @Update
     fun update (position: Position)
 
-    @Delete
-    fun delete (position: Position)
+    @Query("Delete from Position where id=:id ")
+    fun deleteById (id: Int): Unit
 
 }

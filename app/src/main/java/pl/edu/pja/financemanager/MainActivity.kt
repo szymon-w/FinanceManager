@@ -2,6 +2,7 @@ package pl.edu.pja.financemanager
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,6 +19,7 @@ import kotlin.concurrent.thread
 class MainActivity : AppCompatActivity() {
     private val mainBinding by lazy {ActivityMainBinding.inflate(layoutInflater)}
     val db by lazy { PositionDb.open(this) }
+    private val positionAdapter by lazy {PositionAdapter(db,this)}
     private var reloadNeeded = true
     private val addingRequest = 222
 
@@ -25,17 +27,21 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(mainBinding.root)
-        addEditButton()
-        monthlyBalanceButton()
-        mainList()
+        setupAddEditButton()
+        setupMonthlyBalanceButton()
+        setupMainList()
         //addPosition()
     }
 
-    private fun mainList() = with(mainBinding.positionList) {
-        layoutManager=LinearLayoutManager(this@MainActivity)
-        val items = listOf("a","b","c")
-        println(items)
-        adapter = PositionAdapter(items)
+    override fun onResume() {
+        super.onResume();
+        thread{
+            if(this.reloadNeeded) {
+                reloadList()
+                reloadBalance()
+                this.reloadNeeded = false
+            }
+        }
     }
 
     override fun onActivityResult(requestCode:Int , resultCode: Int, data:Intent?) {
@@ -43,50 +49,49 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == addingRequest) {
             if (resultCode == Activity.RESULT_OK) {
                 this.reloadNeeded = true;
-                }
-            }
-        }
-
-    override fun onResume() {
-        super.onResume();
-
-        thread{
-            var today = LocalDate.now()
-            var currentMonthSum:Double
-            if(this.reloadNeeded) {
-                currentMonthSum = db.positions().getSumForChosenMonth(
-                    today.year.toString(),
-                    DateHelper.getStringNumberMonth(today)
-                )
-                runOnUiThread {
-                    mainBinding.summaryValue.text = String.format("%.2f", currentMonthSum)
-                }
-                this.reloadNeeded = false
             }
         }
     }
 
-    private fun monthlyBalanceButton() {
+    private fun setupMainList(){ with(mainBinding.positionList) {
+        layoutManager = LinearLayoutManager(this@MainActivity)
+        adapter = positionAdapter
+        }
+    }
+
+    private fun setupMonthlyBalanceButton() {
         mainBinding.monthButton.setOnClickListener {
             Intent(this, MonthlyBalanceActivity::class.java).let(this::startActivity)
         }
     }
 
-    private fun addEditButton() {
+    private fun setupAddEditButton() {
         mainBinding.addButton.setOnClickListener {
                 startActivityForResult(Intent(this, AddPositionActivity::class.java),222)
             }
         }
 
-    private fun currentMonthBalance() {
-        thread{
-            var today = LocalDate.now()
-            var currentMonthSum = db.positions().getSumForChosenMonth(today.year.toString(), DateHelper.getStringNumberMonth(today))
-            runOnUiThread {
-                mainBinding.summaryValue.text = String.format("%.2f", currentMonthSum)
-            }
+    fun reloadList(){
+        positionAdapter.getDataToList()
+        runOnUiThread {
+            positionAdapter.notifyDataSetChanged()
         }
     }
+
+    fun reloadBalance(){
+        val today = LocalDate.now()
+        val currentMonthSum:Double
+        currentMonthSum = db.positions().getSumForChosenMonth(
+                today.year.toString(),
+                DateHelper.getStringNumberMonth(today)
+        )
+        runOnUiThread {
+            val t = mainBinding.summaryValue
+            t.text = String.format("%.2f", currentMonthSum)
+            if(currentMonthSum<0.0) t.setTextColor(Color.RED) else t.setTextColor(Color.BLACK)
+        }
+    }
+
 
     fun addPosition() {
         val position = Position(
