@@ -1,5 +1,6 @@
 package pl.edu.pja.financemanager.db
 
+import android.database.Cursor
 import androidx.room.*
 
 @Dao
@@ -18,12 +19,21 @@ interface PositionDao {
     fun getPosition(id: Int): Position
 
     @Insert
-    fun insert (position:Position)
+    fun insert (position:Position): Long
 
     @Update
-    fun update (position: Position)
+    fun update (position: Position): Int
 
     @Query("Delete from Position where id=:id ")
-    fun deleteById (id: Int): Unit
+    fun deleteById (id: Int): Int
+
+    //Content provider
+    @Query("Select * from Position order by eventDate")
+    fun getAllCursor(): Cursor
+
+    @Query("Select * from Position where id=:id")
+    fun getPositionByIdCursor(id: Long): Cursor
+
+
 
 }
