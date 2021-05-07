@@ -31,7 +31,6 @@ class MainActivity : AppCompatActivity() {
         setupAddEditButton()
         setupMonthlyBalanceButton()
         setupMainList()
-        //addPosition()
     }
 
     override fun onResume() {
@@ -92,39 +91,4 @@ class MainActivity : AppCompatActivity() {
             if(currentMonthSum<0.0) t.setTextColor(Color.RED) else t.setTextColor(Color.BLACK)
         }
     }
-
-
-    fun addPosition() {
-        val position = Position(
-                0,
-                "Biedronka",
-                "Zakupy",
-                LocalDate.of(2021,10,2),
-                10.00
-        )
-        thread {
-            val x = db.positions().getAllForChosenMonth("2021","03")
-            println(x.joinToString ("|"))
-            //val z = db.positions().getSumForChosenMonth("2021", "05")
-            //println(z)
-            //db.positions().insert(position)
-            //db.positions().insert(position)
-            //val y = db.positions().getAll()
-            //println(y.joinToString ("|"))
-
-            /*db.positions().insert(position)
-            db.positions().insert(position)
-            db.positions().insert(position)
-            val y = db.positions().getAll()
-            println(y.joinToString ("|"))
-            var a = db.positions().getPosition(2)
-            a.place = "Tesco"
-            db.positions().update(a)
-            a = db.positions().getPosition(2)
-            println(a)*/
-
-
-        }
-    }
-
 }
