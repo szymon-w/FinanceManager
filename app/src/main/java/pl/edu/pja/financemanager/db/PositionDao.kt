@@ -18,6 +18,10 @@ interface PositionDao {
     @Query("Select * from Position where id=:id")
     fun getPosition(id: Int): Position
 
+    @Query("Select eventDate, sum(amount) as daySum from Position where strftime('%Y',eventDate)=:eventYear and strftime('%m',eventDate)=:eventMonth  order by eventDate  ")
+    fun getSumDayByDay(eventYear:String, eventMonth:String): Cursor
+
+
     @Insert
     fun insert (position:Position): Long
 
