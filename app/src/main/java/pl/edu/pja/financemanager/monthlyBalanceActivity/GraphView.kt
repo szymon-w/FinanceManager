@@ -42,7 +42,9 @@ class GraphView (
     fun setData(newDataSet: List<DataPoint>) {
         //set y axis min and max
         yMin = newDataSet.minByOrNull { it.yVal }?.yVal?:0
+        if(yMin>0)yMin=0
         yMax = newDataSet.maxByOrNull { it.yVal }?.yVal?: 0
+        if(yMax<0)yMax=0
         dataSet.clear()
         dataSet.addAll(newDataSet)
         //calls onDraw
@@ -62,7 +64,13 @@ class GraphView (
                 val startY = currentDataPoint.yVal.toRealY()
                 val endX = nextDataPoint.xVal.toRealX()
                 val endY = nextDataPoint.yVal.toRealY()
-                if(nextDataPoint.yVal>=0)
+                if(currentDataPoint.yVal>0 && nextDataPoint.yVal<0) {
+                    canvas.drawLine(startX, startY, (startX+endX)/2, 0.toRealY(), positiveDataPointLinePaint)
+                    canvas.drawLine((startX+endX)/2, 0.toRealY(), endX, endY, negativeDataPointLinePaint)
+                }else if(currentDataPoint.yVal<0 && nextDataPoint.yVal>0) {
+                    canvas.drawLine(startX, startY, (startX+endX)/2, 0.toRealY(), negativeDataPointLinePaint)
+                    canvas.drawLine((startX+endX)/2, 0.toRealY(), endX, endY, positiveDataPointLinePaint)
+                }else if(nextDataPoint.yVal>=0)
                     canvas.drawLine(startX, startY, endX, endY, positiveDataPointLinePaint)
                 else
                     canvas.drawLine(startX, startY, endX, endY, negativeDataPointLinePaint)
