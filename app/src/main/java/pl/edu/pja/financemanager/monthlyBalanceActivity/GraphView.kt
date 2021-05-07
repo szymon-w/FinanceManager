@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+import kotlin.math.roundToInt
 
 class GraphView (
     context: Context,
@@ -28,7 +29,7 @@ class GraphView (
     //negative line
     private val negativeDataPointLinePaint = Paint().apply {
         color = Color.RED
-        strokeWidth = 7f
+        strokeWidth = 5f
         isAntiAlias = true
     }
 
@@ -37,6 +38,13 @@ class GraphView (
         color = Color.BLACK
         strokeWidth = 10f
     }
+
+    //labels
+    private val labelsPaint = Paint().apply {
+        color = Color.BLACK
+        textSize = 35F
+    }
+
 
 
     fun setData(newDataSet: List<DataPoint>) {
@@ -67,7 +75,7 @@ class GraphView (
                 if(currentDataPoint.yVal>0 && nextDataPoint.yVal<0) {
                     canvas.drawLine(startX, startY, (startX+endX)/2, 0.toRealY(), positiveDataPointLinePaint)
                     canvas.drawLine((startX+endX)/2, 0.toRealY(), endX, endY, negativeDataPointLinePaint)
-                }else if(currentDataPoint.yVal<0 && nextDataPoint.yVal>0) {
+                }else if(currentDataPoint.yVal<0 && nextDataPoint.yVal>=0) {
                     canvas.drawLine(startX, startY, (startX+endX)/2, 0.toRealY(), negativeDataPointLinePaint)
                     canvas.drawLine((startX+endX)/2, 0.toRealY(), endX, endY, positiveDataPointLinePaint)
                 }else if(nextDataPoint.yVal>=0)
@@ -79,12 +87,35 @@ class GraphView (
 
         //draw axis
         //y axis
-        canvas.drawLine(0f, 0f, 0f, height.toFloat(), axisLinePaint)
+        canvas.drawLine(100f, 0f, 100f, height.toFloat(), axisLinePaint)
         //x axis
-        val xAxisYstartStop = 0.toRealY()
-        canvas.drawLine(0f, xAxisYstartStop, width.toFloat(), xAxisYstartStop, axisLinePaint)
+        val xAxisYStartStop = 0.toRealY()
+        canvas.drawLine(100f, xAxisYStartStop, width.toFloat(), xAxisYStartStop, axisLinePaint)
+
+        //draw y labels
+        canvas.drawText(toLabel(yMin),0f,height.toFloat()-2f,labelsPaint)
+        canvas.drawText(toLabel(yMin*3/4+yMax*1/4),0f,height.toFloat()*3/4,labelsPaint)
+        canvas.drawText(toLabel(yMin*1/2+yMax*1/2),0f,height.toFloat()/2,labelsPaint)
+        canvas.drawText(toLabel(yMin*1/4+yMax*3/4),0f,height.toFloat()*1/4,labelsPaint)
+        canvas.drawText(toLabel(yMax),0f,30f,labelsPaint)
+
+        //draw x labels
+        val xLabelHeight = if(yMin>-100) xAxisYStartStop-30f else xAxisYStartStop+45f
+        for(i in 5..25 step 5)
+            canvas.drawText(i.toString(),i.toRealX()-10f,xLabelHeight,labelsPaint)
+        canvas.drawText("30",30.toRealX()-15f,xLabelHeight,labelsPaint)
+
+
     }
-    private fun Int.toRealX() = toFloat() / xMax * width
+    private fun Int.toRealX() = toFloat() / xMax * (width-100f)+100f
     private fun Int.toRealY() = height-((toFloat()-yMin) / (yMax-yMin) * height)
+    private fun toLabel(number:Int):String{
+        return if(number>9999)
+            (number.toDouble()/1000).roundToInt().toString()+"k"
+        else if(number<-9999)
+            (number.toDouble()/1000).roundToInt().toString()+"k"
+        else
+            number.toString()
+    }
 
 }

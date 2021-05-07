@@ -57,6 +57,7 @@ class MonthlyBalanceActivity : AppCompatActivity() {
                 var value = if(map.containsKey(i)) map.getValue(i) else 0.0
                 sum+=value
                 addingList.add(DataPoint(i,sum.toInt()))
+                //addingList.add(DataPoint(i,value.toInt()))
             }
 
             runOnUiThread{
